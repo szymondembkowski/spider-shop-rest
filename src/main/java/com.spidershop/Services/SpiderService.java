@@ -13,7 +13,7 @@ public interface SpiderService {
 
     Spider createSpider(Spider spider);
 
-    Spider updateSpider(Long id, Spider updatedSpider);
+    Spider updateSpider(Long id, Spider spider);
 
-    void deleteById(Long id);
+    void deleteSpider(Long id);
 }

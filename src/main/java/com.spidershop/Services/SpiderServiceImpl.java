@@ -34,22 +34,24 @@ public class SpiderServiceImpl implements SpiderService {
     @Override
     public Spider updateSpider(Long id, Spider updatedSpider) {
 
-        Spider existingSpider = getSpiderById(id);
+        Spider spider = spiderRepository.getSpiderById(id)
+                .orElseThrow(() -> new RuntimeException("Spider not found with id: " + id));
 
-        existingSpider.setGenus(updatedSpider.getGenus());
-        existingSpider.setSpecies(updatedSpider.getSpecies());
-        existingSpider.setSize(updatedSpider.getSize());
-        existingSpider.setSex(updatedSpider.getSex());
-        existingSpider.setPrice(updatedSpider.getPrice());
-        existingSpider.setQuantity(updatedSpider.getQuantity());
-        existingSpider.setDescription(updatedSpider.getDescription());
-        existingSpider.setAvailable(updatedSpider.isAvailable());
+        spider.setGenus(updatedSpider.getGenus());
+        spider.setSpecies(updatedSpider.getSpecies());
+        spider.setSize(updatedSpider.getSize());
+        spider.setSex(updatedSpider.getSex());
+        spider.setPrice(updatedSpider.getPrice());
+        spider.setQuantity(updatedSpider.getQuantity());
+        spider.setDescription(updatedSpider.getDescription());
+        spider.setAvailable(updatedSpider.isAvailable());
 
-        return spiderRepository.save(existingSpider);
+        return spiderRepository.save(spider);
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteSpider(Long id) {
         spiderRepository.deleteById(id);
     }
+
 }

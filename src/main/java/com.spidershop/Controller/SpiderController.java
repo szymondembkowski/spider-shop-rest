@@ -4,6 +4,7 @@ import com.spidershop.Entity.Spider;
 import com.spidershop.Services.SpiderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,35 +26,23 @@ public class SpiderController {
     }
 
     @GetMapping("/{id}")
-    public Spider getSpiderById(@PathVariable Long id) {
-        return spiderService.getSpiderById(id);
+    public ResponseEntity<Spider> getSpiderById(@PathVariable Long id) {
+        return ResponseEntity.ok(spiderService.getSpiderById(id));
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Spider createSpider(@RequestBody Spider spider) {
-        return spiderService.createSpider(spider);
+    public ResponseEntity<Spider> createSpider(@RequestBody Spider spider) {
+        return ResponseEntity.ok(spiderService.createSpider(spider));
     }
 
     @PutMapping("/{id}")
-    public Spider updateSpider(@PathVariable Long id, @RequestBody Spider updatedSpider) {
-
-        Spider spider = spiderService.getSpiderById(id);
-
-        spider.setGenus(updatedSpider.getGenus());
-        spider.setSpecies(updatedSpider.getSpecies());
-        spider.setPrice(updatedSpider.getPrice());
-        spider.setSize(updatedSpider.getSize());
-        spider.setSex(updatedSpider.getSex());
-        spider.setDescription(updatedSpider.getDescription());
-        spider.setQuantity(updatedSpider.getQuantity());
-        spider.setAvailable(updatedSpider.isAvailable());
-
-        return spiderService.createSpider(spider);
+    public ResponseEntity<Spider> updateSpider(@PathVariable Long id, @RequestBody Spider spider) {
+        return ResponseEntity.ok(spiderService.updateSpider(id, spider));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteSpider(@PathVariable Long id) {
-        spiderService.deleteById(id);
+    public ResponseEntity<Void> deleteSpider(@PathVariable Long id) {
+        spiderService.deleteSpider(id);
+        return ResponseEntity.noContent().build();
     }
 }
