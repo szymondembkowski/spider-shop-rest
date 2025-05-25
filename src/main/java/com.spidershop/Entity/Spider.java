@@ -9,7 +9,6 @@ public class Spider {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String genus;
     private String species;
     private BigDecimal price;

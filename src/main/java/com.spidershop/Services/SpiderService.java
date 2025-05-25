@@ -1,5 +1,6 @@
 package com.spidershop.Services;
 
+import com.spidershop.Dto.SpiderDto;
 import com.spidershop.Entity.Spider;
 
 import java.util.List;
@@ -11,9 +12,9 @@ public interface SpiderService {
 
     Spider getSpiderById(Long id);
 
-    Spider createSpider(Spider spider);
+    Spider createSpider(SpiderDto spiderDto);
 
-    Spider updateSpider(Long id, Spider spider);
+    Spider updateSpider(Long id, SpiderDto spiderDto);
 
     void deleteSpider(Long id);
 }
