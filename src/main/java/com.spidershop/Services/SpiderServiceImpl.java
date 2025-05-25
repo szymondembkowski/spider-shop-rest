@@ -2,6 +2,7 @@ package com.spidershop.Services;
 
 import com.spidershop.Dto.SpiderDto;
 import com.spidershop.Entity.Spider;
+import com.spidershop.Entity.SpiderSize;
 import com.spidershop.Repository.SpiderRepository;
 import org.springframework.stereotype.Service;
 
@@ -29,28 +30,30 @@ public class SpiderServiceImpl implements SpiderService {
     }
 
     @Override
-    public Spider createSpider(SpiderDto dto) {
+    public Spider createSpider(SpiderDto spiderDto) {
+        validateSexBasedOnSize(spiderDto);
         Spider spider = new Spider();
-        spider.setGenus(dto.getGenus());
-        spider.setSpecies(dto.getSpecies());
-        spider.setPrice(dto.getPrice());
-        spider.setQuantity(dto.getQuantity());
-        spider.setSize(dto.getSize());
-        spider.setSex(dto.getSex());
+        spider.setGenus(spiderDto.getGenus());
+        spider.setSpecies(spiderDto.getSpecies());
+        spider.setPrice(spiderDto.getPrice());
+        spider.setQuantity(spiderDto.getQuantity());
+        spider.setSize(spiderDto.getSize());
+        spider.setSex(spiderDto.getSex());
         return spiderRepository.save(spider);
     }
 
     @Override
-    public Spider updateSpider(Long id, SpiderDto dto) {
+    public Spider updateSpider(Long id, SpiderDto spiderDto) {
+        validateSexBasedOnSize(spiderDto);
         Spider spider = spiderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Spider not found with id: " + id));
 
-        spider.setGenus(dto.getGenus());
-        spider.setSpecies(dto.getSpecies());
-        spider.setPrice(dto.getPrice());
-        spider.setQuantity(dto.getQuantity());
-        spider.setSize(dto.getSize());
-        spider.setSex(dto.getSex());
+        spider.setGenus(spiderDto.getGenus());
+        spider.setSpecies(spiderDto.getSpecies());
+        spider.setPrice(spiderDto.getPrice());
+        spider.setQuantity(spiderDto.getQuantity());
+        spider.setSize(spiderDto.getSize());
+        spider.setSex(spiderDto.getSex());
         return spiderRepository.save(spider);
     }
 
@@ -59,4 +62,11 @@ public class SpiderServiceImpl implements SpiderService {
         spiderRepository.deleteById(id);
     }
 
+    private void validateSexBasedOnSize(SpiderDto spiderDto){
+        if(spiderDto.getSize().compareTo(SpiderSize.Juvenile) >= 0) {
+            if(spiderDto.getSex() == null){
+                throw new IllegalArgumentException("Sex must be specified for spiders of size Junvenile or greater.");
+            }
+        }
+    }
 }
