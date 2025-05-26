@@ -3,6 +3,7 @@ package com.spidershop.Services;
 import com.spidershop.Dto.SpiderDto;
 import com.spidershop.Entity.Spider;
 import com.spidershop.Entity.SpiderSize;
+import com.spidershop.Exception.SpiderNotFoundException;
 import com.spidershop.Repository.SpiderRepository;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class SpiderServiceImpl implements SpiderService {
     @Override
     public Spider getSpiderById(Long id) {
         return spiderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Spider not found with id: " + id));
+                .orElseThrow(() -> new SpiderNotFoundException("Spider not found with id: " + id));
     }
 
     @Override
@@ -46,7 +47,7 @@ public class SpiderServiceImpl implements SpiderService {
     public Spider updateSpider(Long id, SpiderDto spiderDto) {
         validateSexBasedOnSize(spiderDto);
         Spider spider = spiderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Spider not found with id: " + id));
+                .orElseThrow(() -> new SpiderNotFoundException("Spider not found with id: " + id));
 
         spider.setGenus(spiderDto.getGenus());
         spider.setSpecies(spiderDto.getSpecies());
@@ -59,8 +60,13 @@ public class SpiderServiceImpl implements SpiderService {
 
     @Override
     public void deleteSpider(Long id) {
+        if (!spiderRepository.existsById(id)) {
+            throw new SpiderNotFoundException("Spider not found with id: " + id);
+        }
         spiderRepository.deleteById(id);
     }
+
+
 
     private void validateSexBasedOnSize(SpiderDto spiderDto){
         if(spiderDto.getSize().compareTo(SpiderSize.Juvenile) >= 0) {
