@@ -5,12 +5,13 @@ import com.spidershop.Entity.Spider;
 import com.spidershop.Entity.SpiderSize;
 import com.spidershop.Exception.SpiderNotFoundException;
 import com.spidershop.Repository.SpiderRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@Transactional
 public class SpiderServiceImpl implements SpiderService {
 
     private final SpiderRepository spiderRepository;
@@ -65,8 +66,6 @@ public class SpiderServiceImpl implements SpiderService {
         }
         spiderRepository.deleteById(id);
     }
-
-
 
     private void validateSexBasedOnSize(SpiderDto spiderDto){
         if(spiderDto.getSize().compareTo(SpiderSize.Juvenile) >= 0) {
