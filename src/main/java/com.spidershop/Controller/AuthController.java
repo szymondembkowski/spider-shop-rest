@@ -4,8 +4,12 @@ import com.spidershop.Dto.LoginRequest;
 import com.spidershop.Dto.RegisterRequest;
 import com.spidershop.Services.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -26,9 +30,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
-        String token = authService.login(request);
-        return ResponseEntity.ok(token);
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        try {
+            String token = authService.login(request);
+            return ResponseEntity.ok(Map.of("token", token));
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+        }
     }
+
 
 }
